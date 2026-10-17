@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jayvee — Franquias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f3f1ec;
+    --surface: #ffffff;
+    --text: #1b1d2a;
+    --muted: #5d6070;
+    --line: #d9d6cd;
+    --accent: #2f4bd6;
+    --hc: #b7791f;
+    --sc: #2f6fb0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14162a;
+      --surface: #1c1f38;
+      --text: #ecebf5;
+      --muted: #a2a4bd;
+      --line: #2e3254;
+      --accent: #8fa2ff;
+      --hc: #f0b84a;
+      --sc: #7db4ee;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 "IBM Plex Sans", system-ui, sans-serif;
+    padding: env(safe-area-inset-top, 0) 0 env(safe-area-inset-bottom, 0);
+  }
+  main { max-width: 1000px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font: 18px/1.4 "Press Start 2P", monospace; margin: 0 0 8px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 0 0 32px; color: var(--muted); font-size: 13px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 12px; height: 12px; border-radius: 3px; border: 2px solid var(--line); }
+  .dot.hc { border-color: var(--hc); }
+  .dot.sc { border-color: var(--sc); }
+  section { margin-bottom: 40px; }
+  h2 { font-size: 20px; margin: 0 0 4px; }
+  .prog { color: var(--muted); margin: 0 0 16px; font-variant-numeric: tabular-nums; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; }
+  .card {
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .card.hardcore { border-color: var(--hc); }
+  .card.softcore { border-color: var(--sc); }
+  .card img { width: 64px; height: 64px; border-radius: 6px; image-rendering: pixelated; display: block; margin: 0 auto 8px; }
+  .card.pending img { filter: grayscale(1); opacity: .45; }
+  .card.pending .t { color: var(--muted); }
+  .t { font-weight: 500; font-size: 13px; line-height: 1.3; }
+  .c { color: var(--muted); font-size: 12px; margin-top: 2px; }
+  .tag { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 600; }
+  .hardcore .tag { color: var(--hc); }
+  .softcore .tag { color: var(--sc); }
+  .pending .tag { color: var(--muted); font-weight: 400; }
+  .empty { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Franquias</h1>
+  <p class="sub" id="sub">Carregando…</p>
+  <div class="legend">
+    <span><i class="dot hc"></i>Zerado em hardcore</span>
+    <span><i class="dot sc"></i>Zerado em softcore</span>
+    <span><i class="dot"></i>Ainda não zerado</span>
+  </div>
+  <div id="root"></div>
+</main>
+<script>
+(async () => {
+  const root = document.getElementById("root");
+  const sub = document.getElementById("sub");
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const label = { hardcore: "Hardcore", softcore: "Softcore" };
+
+  let data;
+  try {
+    data = await (await fetch("data/status.json")).json();
+  } catch {
+    sub.textContent = "";
+    root.innerHTML = '<p class="empty">Ainda não há dados. Rode "node fetch-ra.mjs" ou execute o workflow Atualizar dados do RA no GitHub.</p>';
+    return;
+  }
+  sub.textContent = `${data.user} · atualizado em ${new Date(data.updated).toLocaleDateString("pt-BR")}`;
+
+  root.innerHTML = data.franchises.map((f) => {
+    const done = f.games.filter((g) => g.beaten).length;
+    const cards = f.games.map((g) => {
+      const state = g.beaten ?? "pending";
+      return `<a class="card ${state}" href="https://retroachievements.org/game/${g.id}" target="_blank" rel="noopener">
+        ${g.icon ? `<img src="${esc(g.icon)}" alt="" loading="lazy">` : ""}
+        <div class="t">${esc(g.title)}</div>
+        <div class="c">${esc(g.console)}</div>
+        <span class="tag">${label[state] ?? "Pendente"}</span>
+      </a>`;
+    }).join("");
+    return `<section><h2>${esc(f.name)}</h2><p class="prog">${done} de ${f.games.length} zerados</p><div class="grid">${cards}</div></section>`;
+  }).join("");
+})();
+</script>
+</body>
+</html>
