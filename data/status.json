@@ -1,0 +1,88 @@
+{
+  "user": "Jayvee",
+  "updated": "2026-10-17T20:37:03.319Z",
+  "franchises": [
+    {
+      "name": "Mega Man",
+      "games": [
+        {
+          "id": 1448,
+          "title": "Mega Man",
+          "console": "NES/Famicom",
+          "icon": "https://media.retroachievements.org/Images/024519.png",
+          "beaten": "hardcore"
+        },
+        {
+          "id": 1451,
+          "title": "Mega Man 2",
+          "console": "NES/Famicom",
+          "icon": "https://media.retroachievements.org/Images/082481.png",
+          "beaten": "hardcore"
+        },
+        {
+          "id": 1483,
+          "title": "Mega Man 3",
+          "console": "NES/Famicom",
+          "icon": "https://media.retroachievements.org/Images/082508.png",
+          "beaten": "hardcore"
+        },
+        {
+          "id": 1829,
+          "title": "Mega Man 4",
+          "console": "NES/Famicom",
+          "icon": "https://media.retroachievements.org/Images/082509.png",
+          "beaten": "hardcore"
+        },
+        {
+          "id": 1484,
+          "title": "Mega Man 5",
+          "console": "NES/Famicom",
+          "icon": "https://media.retroachievements.org/Images/082510.png",
+          "beaten": null
+        },
+        {
+          "id": 1485,
+          "title": "Mega Man 6",
+          "console": "NES/Famicom",
+          "icon": "https://media.retroachievements.org/Images/082511.png",
+          "beaten": null
+        },
+        {
+          "id": 469,
+          "title": "Mega Man 7",
+          "console": "SNES/Super Famicom",
+          "icon": "https://media.retroachievements.org/Images/105305.png",
+          "beaten": null
+        },
+        {
+          "id": 3438,
+          "title": "Rockman & Forte",
+          "console": "SNES/Super Famicom",
+          "icon": "https://media.retroachievements.org/Images/028133.png",
+          "beaten": null
+        },
+        {
+          "id": 11365,
+          "title": "Mega Man 8",
+          "console": "PlayStation",
+          "icon": "https://media.retroachievements.org/Images/054970.png",
+          "beaten": null
+        },
+        {
+          "id": 71,
+          "title": "Mega Man 9",
+          "console": "Wii",
+          "icon": "https://media.retroachievements.org/Images/082527.png",
+          "beaten": null
+        },
+        {
+          "id": 72,
+          "title": "Mega Man 10",
+          "console": "Wii",
+          "icon": "https://media.retroachievements.org/Images/082622.png",
+          "beaten": null
+        }
+      ]
+    }
+  ]
+}
