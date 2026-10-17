@@ -9,11 +9,16 @@ if (!KEY) {
 }
 
 const config = JSON.parse(await readFile("franchises.json", "utf8"));
-const USER = config.user;
+const USER = config.user; // perfil acompanhado
+const API_USER = config.apiUser ?? config.user; // dono da chave de API
+if (API_USER.includes("TROQUE")) {
+  console.error('Edite "apiUser" no franchises.json com o usuario da conta que gerou a chave.');
+  process.exit(1);
+}
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function api(endpoint, params) {
-  const qs = new URLSearchParams({ z: USER, y: KEY, ...params });
+  const qs = new URLSearchParams({ z: API_USER, y: KEY, ...params });
   const res = await fetch(`https://retroachievements.org/API/${endpoint}.php?${qs}`);
   if (!res.ok) throw new Error(`${endpoint}: HTTP ${res.status}`);
   return res.json();
